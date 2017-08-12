@@ -55,6 +55,11 @@ class App(object):
         self.clock = pygame.time.Clock()      # For frames per second
         self.mouse = pygame.mouse.get_pos()   # For mouse position
 
+        self.background = pygame.image.load(self.appDirectory + "/images/golf2.png")
+        self.test_card = pygame.image.load(self.appDirectory + "/images/joker.png")
+        self.joker2 = pygame.image.load(self.appDirectory + "/images/joker2.png")
+        self.back_vertical = pygame.image.load(self.appDirectory + "/images/back_vertical.png")
+        self.back_horizontal = pygame.image.load(self.appDirectory + "/images/back_horizontal.png")
     # Method runs app
     def runApp(self) -> None:
         running = True
@@ -63,7 +68,29 @@ class App(object):
                 
                 # Handle quit event
                 if event.type == pygame.QUIT:
-                    running = False            
+                    running = False
+
+            self.screen.blit(self.background, ORIGIN)
+
+            # Player 1
+            self.screen.blit(self.back_horizontal, (20, 90))
+            self.screen.blit(self.back_horizontal, (155, 90))
+            self.screen.blit(self.test_card, (20, 190))
+            self.screen.blit(self.test_card, (155, 190))
+            self.screen.blit(self.back_horizontal, (20, 290))
+            self.screen.blit(self.back_horizontal, (155, 290))
+
+            # Player 2
+            self.screen.blit(self.back_horizontal, (520, 90))
+            self.screen.blit(self.back_horizontal, (655, 90))
+            self.screen.blit(self.test_card, (520, 190))
+            self.screen.blit(self.test_card, (655, 190))
+            self.screen.blit(self.back_horizontal, (520, 290))
+            self.screen.blit(self.back_horizontal, (655, 290))
+
+            # Middle Cards
+            self.screen.blit(self.joker2, (307, 180))
+            self.screen.blit(self.back_vertical, (402, 180))
 
             # Update Screen
             pygame.display.update()
