@@ -2,9 +2,9 @@
 #                                                                              #
 # David Fuller                                                                 #
 #                                                                              #
-# App class: App initializer                                                   #
+# Layout class: Card Layout                                                    #
 #                                                                              #
-# Created on 2016-12-29                                                        #
+# Created on 2017-8-12                                                         #
 #                                                                              #
 ################################################################################
 
@@ -14,19 +14,16 @@
 #                                                                              #
 ################################################################################
 
-from   subprocess import call     # Used for shutting down
-from   .Constants import *        # Constants file
-from   .layout    import Layout   # Handle game layout
-import pygame                     # For GUI
-
+import pygame # For GUI
 
 ################################################################################
 #                                                                              #
-#                                   APP CLASS                                  #
+#                                 LAYOUT CLASS                                 #
 #                                                                              #
 ################################################################################
 
-class App(object):
+class Layout(object):
+    screenHint = "screen object"
 
     ############################################################################
     #                                                                          #
@@ -34,14 +31,11 @@ class App(object):
     #                                                                          #
     ############################################################################
     
-    def __init__(self, appDirectory: str) -> None:
-        self.appDirectory = appDirectory
-
-        # Set up GUI
+    def __init__(self, appDirectory: str, screen : screenHint) -> None:
+        self.image_directory = appDirectory + "/images/"
+        self.screen = screen
+        self.card_back = pygame.image.load(self.image_directory + "back.png")
         self.setupGUI()
-
-        # Run app
-        self.runApp()
 
     ############################################################################
     #                                                                          #
@@ -51,37 +45,27 @@ class App(object):
 
     # Mehtod sets up GUI
     def setupGUI(self) -> None:
-        # Screen attributes
-        pygame.init()
-        self.screen = pygame.display.set_mode(SCREEN_RESOLUTION)
-        pygame.display.set_caption(TITLE)
-        self.clock = pygame.time.Clock()      # For frames per second
-        self.mouse = pygame.mouse.get_pos()   # For mouse position
+        self.rotated = pygame.transform.rotate(self.card_back, -90)
+        # Player 1
+        self.screen.blit(self.rotated, (20, 90))
+        self.screen.blit(self.rotated, (155, 90))
+        self.screen.blit(self.rotated, (20, 190))
+        self.screen.blit(self.rotated, (155, 190))
+        self.screen.blit(self.rotated, (20, 290))
+        self.screen.blit(self.rotated, (155, 290))
 
-        # Setup layout
-        self.background = pygame.image.load(self.appDirectory + "/images/background.png")
-        self.layout = Layout(self.appDirectory, self.screen)
-    # Method runs app
-    def runApp(self) -> None:
-        running = True
-        while running:
-            for event in pygame.event.get():
-                
-                # Handle quit event
-                if event.type == pygame.QUIT:   # Click X
-                    running = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:   # Hit Escape
-                        running = False
+        # Player 2
+        self.screen.blit(self.rotated, (520, 90))
+        self.screen.blit(self.rotated, (655, 90))
+        self.screen.blit(self.rotated, (520, 190))
+        self.screen.blit(self.rotated, (655, 190))
+        self.screen.blit(self.rotated, (520, 290))
+        self.screen.blit(self.rotated, (655, 290))
 
-            # Background image
-            self.screen.blit(self.background, ORIGIN)
+        # Middle Cards
+        self.screen.blit(self.card_back, (307, 180))
+        self.screen.blit(self.card_back, (402, 180))
 
-            # Update Screen
-            self.layout.update()
-            pygame.display.update()
-            self.clock.tick(FPS)            
-
-        # Close app cleanly
-        pygame.quit()
-        call("shutdown -h now", shell=True)
+    # Method updates game layout
+    def update(self) -> None:
+        self.setupGUI()
